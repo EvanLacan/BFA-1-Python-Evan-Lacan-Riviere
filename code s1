@@ -1,0 +1,184 @@
+print("hello world")
+x = 50
+print(type(x))
+cours_air_liquide = 168.40
+print(type(cours_air_liquide))
+ticker = "AI.PA"
+print(type(ticker))
+marche_ouvert = True
+print(type(marche_ouvert))
+historique_prix = [165.2, 166.8, 168.4]
+print(type(historique_prix))
+allocation_pea = {"AI.PA": 15, "CW8.PA": 40}
+print(type(allocation_pea))
+
+capital = 1000
+rendement = 5
+
+print("--- Arithmétique ---")
+print("Addition (+) :", capital + 50)
+print("Soustraction (-) :", capital - 50)
+print("Multiplication (*) :", capital * 1.05)
+print("Division (/) :", capital / 3)        
+print("Division entière (//) :", capital // 3)
+print("Modulo (%) :", capital % 3)          
+print("Puissance (**) :", rendement ** 2)
+
+devise_base = "eur"
+devise_cotation = "usd"
+
+print("\n--- Chaînes de caractères ---")
+# La concaténation "colle" les textes ensemble avec le signe +
+paire = devise_base + "/" + devise_cotation
+print("Concaténation :", paire)
+
+# Les méthodes sont des fonctions rattachées à l'objet
+print("Majuscules (.upper()) :", paire.upper())
+
+phrase = "taux de change de la bce"
+# .split() découpe la phrase à chaque espace et en fait une liste de mots
+print("Découpage (.split()) :", phrase.split())
+
+historique_taux = [1.05, 1.06, 1.08]
+
+print("\n--- Listes ---")
+historique_taux.append(1.09) # Ajoute 1.09 à la toute fin de la liste
+print("Ajout d'un élément :", historique_taux)
+print("Longueur de la liste (len) :", len(historique_taux))
+
+# Attention, en Python on commence à compter à 0 !
+print("Accès par indice (le 1er élément) :", historique_taux[0])
+
+reponse_api = {"USD": 1.0956, "GBP": 0.8543}
+
+print("\n--- Dictionnaires ---")
+print("Accès à la valeur de l'USD :", reponse_api["USD"])
+
+# Ajout d'une nouvelle devise (si la clé n'existe pas, elle est créée)
+reponse_api["JPY"] = 160.50
+print("Ajout de la clé JPY :", reponse_api)
+
+
+taux_actuel = 1.08
+taux_cible = 1.10
+
+print("\n--- Comparaisons ---")
+print("Égalité (==) :", taux_actuel == taux_cible)
+print("Différence (!=) :", taux_actuel != taux_cible)
+print("Strictement inférieur (<) :", taux_actuel < taux_cible)
+print("Strictement supérieur (>) :", taux_actuel > taux_cible)
+print("Inférieur ou égal (<=) :", taux_actuel <= 1.08)
+print("Supérieur ou égal (>=) :", taux_actuel >= 1.08)
+
+marche_ouvert = True
+fonds_suffisants = False
+
+print("\n--- Opérateurs booléens ---")
+# 'and' : il faut que TOUTES les conditions soient True
+print("AND (les deux sont vrais ?) :", marche_ouvert and fonds_suffisants)
+
+# 'or' : il suffit qu'UNE SEULE condition soit True
+print("OR (au moins un est vrai ?) :", marche_ouvert or fonds_suffisants)
+
+# 'not' : inverse la valeur logique (True devient False, et inversement)
+print("NOT (inverse de marche_ouvert) :", not marche_ouvert)
+
+
+taux = 1.08
+
+if taux > 1:
+    print("au-dessus de 1")
+elif taux == 1:
+    print("égal à 1")
+else:
+    print("en-dessous de 1")
+
+print("\n--- Test avec plusieurs valeurs ---")
+# On met nos scénarios dans une liste
+scenarios_taux = [1.08, 1.0, 0.85]
+
+# On utilise une boucle for pour tester chaque valeur automatiquement
+for t in scenarios_taux:
+    print("Test pour taux =", t, ":", end=" ")
+   
+    if t > 1:
+        print("au-dessus de 1")
+    elif t == 1:
+        print("égal à 1")
+    else:
+        print("en-dessous de 1")
+
+
+
+
+liste_taux = [1.05, 1.08, 1.10]
+print("--- Parcours et somme avec FOR ---")
+somme_for = 0
+
+for taux in liste_taux:
+    print("Valeur lue :", taux)
+    somme_for = somme_for + taux  # On ajoute le taux à la cagnotte
+
+print("Somme totale (FOR) :", somme_for)
+
+
+print("\n--- Parcours et somme avec WHILE ---")
+somme_while = 0
+indice = 0
+
+while indice < len(liste_taux):
+    valeur_actuelle = liste_taux[indice] # On doit extraire la valeur manuellement
+    print("Valeur lue :", valeur_actuelle)
+   
+    somme_while = somme_while + valeur_actuelle
+    indice = indice + 1  # On passe à la case suivante
+
+print("Somme totale (WHILE) :", somme_while)
+
+import urllib.request
+import json
+import csv
+from pathlib import Path
+
+# ==========================================
+# 1. Taux du jour
+# ==========================================
+print("--- 1. Appel de l'API (Taux du jour) ---")
+url_latest = "https://api.frankfurter.app/latest?from=EUR&to=USD"
+
+# urllib envoie la requête à l'adresse web
+with urllib.request.urlopen(url_latest) as reponse_web:
+    # On lit le texte brut, puis json.loads le transforme en dictionnaire Python
+    data_latest = json.loads(reponse_web.read().decode())
+    print(f"Le {data_latest['date']}, le taux EUR/USD est de {data_latest['rates']['USD']}")
+
+# ==========================================
+# 2. Série sur une période et sauvegarde
+# ==========================================
+print("\n--- 2. Historique et création des fichiers ---")
+url_historique = "https://api.frankfurter.app/2026-01-01..2026-09-01?from=EUR&to=USD"
+
+with urllib.request.urlopen(url_historique) as reponse_web:
+    data_historique = json.loads(reponse_web.read().decode())
+
+# Création automatique des dossiers demandés par l'enseignante
+Path("cache").mkdir(exist_ok=True)
+Path("donnees").mkdir(exist_ok=True)
+
+# Sauvegarde de la réponse brute en JSON dans le dossier cache
+with open("cache/reponse_brute.json", "w") as fichier_json:
+    json.dump(data_historique, fichier_json)
+print("Fichier JSON enregistré dans cache/reponse_brute.json")
+
+# Traitement de la donnée et sauvegarde en CSV propre
+with open("donnees/taux_historique.csv", "w", newline='') as fichier_csv:
+    writer = csv.writer(fichier_csv)
+    # Écriture de la ligne d'en-tête (les noms des colonnes)
+    writer.writerow(["Date", "Taux_USD"])
+   
+    # On boucle sur le dictionnaire "rates" qui contient les dates en clés
+    for date, valeurs in data_historique["rates"].items():
+        taux = valeurs["USD"] # On extrait le taux spécifique à l'USD
+        writer.writerow([date, taux]) # On écrit la ligne dans le fichier
+
+print("Fichier CSV enregistré dans donnees/taux_historique.csv")
