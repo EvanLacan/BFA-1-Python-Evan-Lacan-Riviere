@@ -182,3 +182,4 @@ with open("donnees/taux_historique.csv", "w", newline='') as fichier_csv:
         writer.writerow([date, taux]) # On écrit la ligne dans le fichier
 
 print("Fichier CSV enregistré dans donnees/taux_historique.csv")
+
